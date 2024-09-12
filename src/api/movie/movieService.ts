@@ -45,6 +45,25 @@ export class MovieService {
       return ServiceResponse.failure("An error occurred while finding movie.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
+
+  // Searches for movies by their name
+  async search(query: string): Promise<ServiceResponse<Movie[] | null>> {
+    try {
+      const movies = await this.movieRepository.searchAsync(query);
+      if (!movies || movies.length === 0) {
+        return ServiceResponse.failure("No Movies found", null, StatusCodes.NOT_FOUND);
+      }
+      return ServiceResponse.success<Movie[]>("Movies found", movies);
+    } catch (ex) {
+      const errorMessage = `Error searching for movies: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure(
+        "An error occurred while searching for movies.",
+        null,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
 
 export const movieService = new MovieService();

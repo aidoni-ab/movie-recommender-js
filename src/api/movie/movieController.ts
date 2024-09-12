@@ -14,6 +14,12 @@ class MovieController {
     const serviceResponse = await movieService.findById(id);
     return handleServiceResponse(serviceResponse, res);
   };
+
+  public searchMovies: RequestHandler = async (req: Request, res: Response) => {
+    const query = req.query.q as string;
+    const serviceResponse = await movieService.search(query);
+    return handleServiceResponse(serviceResponse, res);
+  };
 }
 
 export const movieController = new MovieController();
