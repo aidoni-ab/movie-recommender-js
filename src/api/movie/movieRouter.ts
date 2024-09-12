@@ -23,6 +23,23 @@ movieRouter.get("/", movieController.getMovies);
 
 movieRegistry.registerPath({
   method: "get",
+  path: "/movies/search",
+  parameters: [
+    {
+      name: "q",
+      in: "query",
+      required: true,
+      schema: { type: "string" },
+    },
+  ],
+  tags: ["Movie"],
+  responses: createApiResponse(z.array(MovieSchema), "Success"),
+});
+
+movieRouter.get("/search", movieController.searchMovies);
+
+movieRegistry.registerPath({
+  method: "get",
   path: "/movies/{id}",
   tags: ["Movie"],
   request: { params: GetMovieSchema.shape.params },
